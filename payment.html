@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Add Money – WinBet</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
+  <style>
+    .payment-page { min-height: 100vh; display: flex; flex-direction: column; background: var(--bg-page); }
+    .payment-header {
+      background: var(--bg-header);
+      color: #fff;
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .payment-header a { color: #fff; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 0.5rem; }
+    .payment-header a:hover { color: rgba(255,255,255,0.9); }
+    .payment-main { flex: 1; display: flex; align-items: flex-start; justify-content: center; padding: 2rem 1rem; }
+    .payment-card {
+      width: 100%;
+      max-width: 440px;
+      background: var(--bg-card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+    .payment-card-header {
+      background: var(--bg-nav);
+      color: #fff;
+      padding: 1.25rem;
+      text-align: center;
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+    .payment-card-body { padding: 1.75rem; }
+    .payment-amounts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; margin-bottom: 1.25rem; }
+    .payment-amount-btn {
+      padding: 0.85rem;
+      border: 2px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--bg-card);
+      font-weight: 600;
+      color: var(--text);
+      cursor: pointer;
+      transition: border-color var(--transition), background var(--transition), color var(--transition);
+    }
+    .payment-amount-btn:hover { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
+    .payment-amount-btn.active { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
+    .payment-card .form-control { border-radius: var(--radius-sm); padding: 0.65rem 0.85rem; }
+    .payment-methods { margin-top: 1.25rem; }
+    .payment-method {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem;
+      border: 2px solid var(--border);
+      border-radius: var(--radius-sm);
+      margin-bottom: 0.75rem;
+      cursor: pointer;
+      transition: border-color var(--transition), background var(--transition);
+    }
+    .payment-method:hover { border-color: var(--accent); background: var(--accent-soft); }
+    .payment-method.selected { border-color: var(--accent); background: var(--accent-soft); }
+    .payment-method input { display: none; }
+    .payment-method-icon { font-size: 1.5rem; color: var(--text-muted); }
+    .payment-method label { margin: 0; cursor: pointer; font-weight: 500; flex: 1; }
+    .btn-pay-now {
+      background: var(--accent);
+      color: #fff !important;
+      font-weight: 600;
+      padding: 0.75rem;
+      border-radius: var(--radius-sm);
+      border: none;
+      width: 100%;
+      margin-top: 1.25rem;
+      transition: background var(--transition), transform 0.15s ease;
+    }
+    .btn-pay-now:hover { background: var(--accent-hover); color: #fff !important; transform: translateY(-1px); }
+    .btn-pay-now:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+    .payment-note { font-size: 0.8rem; color: var(--text-muted); margin-top: 1rem; }
+
+    @media (max-width: 576px) {
+      .payment-header { padding: 0.75rem 1rem; flex-wrap: wrap; gap: 0.5rem; }
+      .payment-header a { font-size: 0.875rem; }
+      .payment-main { padding: 1.25rem 0.75rem; }
+      .payment-card-body { padding: 1.25rem; }
+      .payment-amounts { grid-template-columns: repeat(2, 1fr); gap: 0.5rem; margin-bottom: 1rem; }
+      .payment-amount-btn { padding: 0.75rem; font-size: 0.9rem; }
+      .payment-method { padding: 0.85rem; gap: 0.75rem; }
+      .payment-method-icon { font-size: 1.25rem; }
+      .payment-note { font-size: 0.75rem; }
+    }
+
+    @media (max-width: 400px) {
+      .payment-header { padding: 0.6rem 0.75rem; }
+      .payment-header a { font-size: 0.8125rem; }
+      .payment-main { padding: 1rem 0.5rem; }
+      .payment-card-body { padding: 1rem; }
+      .payment-amounts { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body class="payment-page">
+  <header class="payment-header">
+    <a href="profile.html"><i class="bi bi-arrow-left"></i> Back to Profile</a>
+    <a href="index.html">WinBet</a>
+  </header>
+
+  <main class="payment-main">
+    <div class="payment-card">
+      <div class="payment-card-header"><i class="bi bi-wallet2 me-2"></i> Add Money to Wallet</div>
+      <div class="payment-card-body">
+        <form id="paymentForm" action="profile.html" method="get">
+          <label class="form-label fw-semibold">Amount (₹)</label>
+          <div class="payment-amounts">
+            <button type="button" class="payment-amount-btn" data-amount="500">₹ 500</button>
+            <button type="button" class="payment-amount-btn" data-amount="1000">₹ 1,000</button>
+            <button type="button" class="payment-amount-btn" data-amount="2500">₹ 2,500</button>
+            <button type="button" class="payment-amount-btn" data-amount="5000">₹ 5,000</button>
+            <button type="button" class="payment-amount-btn" data-amount="10000">₹ 10,000</button>
+            <button type="button" class="payment-amount-btn" data-amount="custom">Custom</button>
+          </div>
+          <input type="number" class="form-control" name="amount" id="amountInput" placeholder="Enter amount" min="100" step="100" value="" required>
+
+          <div class="payment-methods mt-4">
+            <label class="form-label fw-semibold d-block">Payment Method</label>
+            <div class="payment-method selected" data-method="upi">
+              <input type="radio" name="method" id="methodUpi" value="upi" checked>
+              <span class="payment-method-icon"><i class="bi bi-phone"></i></span>
+              <label for="methodUpi">UPI (GPay, PhonePe, Paytm)</label>
+            </div>
+            <div class="payment-method" data-method="card">
+              <input type="radio" name="method" id="methodCard" value="card">
+              <span class="payment-method-icon"><i class="bi bi-credit-card"></i></span>
+              <label for="methodCard">Debit / Credit Card</label>
+            </div>
+            <div class="payment-method" data-method="netbanking">
+              <input type="radio" name="method" id="methodNet" value="netbanking">
+              <span class="payment-method-icon"><i class="bi bi-bank"></i></span>
+              <label for="methodNet">Net Banking</label>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-pay-now" id="btnPayNow"><i class="bi bi-lock-fill me-2"></i>Pay Securely</button>
+        </form>
+        <p class="payment-note mb-0"><i class="bi bi-shield-check me-1"></i> Your payment is secured with encryption. Minimum add amount: ₹ 100.</p>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    (function () {
+      var amountInput = document.getElementById('amountInput');
+      var amountBtns = document.querySelectorAll('.payment-amount-btn');
+      var methodDivs = document.querySelectorAll('.payment-method');
+
+      amountBtns.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          amountBtns.forEach(function (b) { b.classList.remove('active'); });
+          btn.classList.add('active');
+          var amount = btn.getAttribute('data-amount');
+          if (amount === 'custom') {
+            amountInput.value = '';
+            amountInput.focus();
+          } else {
+            amountInput.value = amount;
+          }
+        });
+      });
+
+      methodDivs.forEach(function (div) {
+        div.addEventListener('click', function () {
+          methodDivs.forEach(function (d) { d.classList.remove('selected'); });
+          div.classList.add('selected');
+          div.querySelector('input[type="radio"]').checked = true;
+        });
+      });
+
+      document.getElementById('paymentForm').addEventListener('submit', function (e) {
+        var amt = parseInt(amountInput.value, 10);
+        if (isNaN(amt) || amt < 100) {
+          e.preventDefault();
+          alert('Please enter a valid amount (minimum ₹ 100).');
+          return;
+        }
+      });
+    })();
+  </script>
+</body>
+
+</html>
