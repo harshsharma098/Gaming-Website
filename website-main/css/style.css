@@ -1,6 +1,7 @@
 /* Modern design system */
 :root {
-  --bg-page: #f1f5f9;
+  --bg-page: #eef2f7;
+  --bg-page-alt: #e8eef5;
   --bg-card: #ffffff;
   --bg-header: #0f172a;
   --bg-nav: #1e293b;
@@ -12,12 +13,15 @@
   --text: #1e293b;
   --text-muted: #64748b;
   --border: #e2e8f0;
-  --radius: 12px;
-  --radius-sm: 8px;
+  --radius: 14px;
+  --radius-sm: 10px;
+  --radius-lg: 18px;
   --shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
-  --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.1);
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.06);
   --transition: 0.2s ease;
+  --header-h: 112px;
 }
 
 *,
@@ -27,15 +31,17 @@
 }
 
 html {
-  font-size: 16px;
+  font-size: clamp(15px, 1.5vw + 12px, 16px);
   -webkit-text-size-adjust: 100%;
   overflow-x: hidden;
+  scroll-behavior: smooth;
 }
 
 body {
   font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   color: var(--text);
   background: var(--bg-page);
+  background-image: linear-gradient(180deg, var(--bg-page-alt) 0%, var(--bg-page) 30%, var(--bg-page) 100%);
   line-height: 1.6;
   margin: 0;
   min-height: 100vh;
@@ -52,9 +58,11 @@ body {
   position: sticky;
   top: 0;
   z-index: 100;
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
   padding-left: env(safe-area-inset-left);
   padding-right: env(safe-area-inset-right);
+  width: 100%;
+  max-width: 100%;
 }
 
 .header-top {
@@ -235,6 +243,13 @@ body {
   background: var(--accent);
 }
 
+/* Focus visible for accessibility */
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
 .tag-new {
   background: #f43f5e;
   color: #fff;
@@ -249,7 +264,10 @@ body {
 /* ========== Layout ========== */
 .layout-with-sidebar {
   display: flex;
-  min-height: calc(100vh - 112px);
+  min-height: calc(100vh - var(--header-h));
+  min-height: calc(100dvh - var(--header-h));
+  width: 100%;
+  max-width: 100%;
 }
 
 /* ========== Sidebar ========== */
@@ -260,7 +278,8 @@ body {
   border-right: 1px solid var(--border);
   flex-shrink: 0;
   padding: 1rem 0;
-  box-shadow: var(--shadow);
+  box-shadow: var(--shadow-card);
+  border-radius: 0 var(--radius) 0 0;
 }
 
 .sidebar-section {
@@ -426,6 +445,7 @@ body {
   padding: 1.5rem;
   overflow-x: hidden;
   min-width: 0;
+  max-width: 100%;
 }
 
 /* Match cards */
@@ -437,9 +457,11 @@ body {
   display: flex;
   gap: 1rem;
   overflow-x: auto;
-  padding: 0.5rem 0;
+  overflow-y: hidden;
+  padding: 0.5rem 0 0.75rem;
   scrollbar-width: thin;
   scrollbar-color: var(--border) transparent;
+  -webkit-overflow-scrolling: touch;
 }
 
 .match-cards-scroll::-webkit-scrollbar {
@@ -457,7 +479,8 @@ body {
 
 .match-card-item {
   flex: 0 0 auto;
-  width: 240px;
+  width: min(260px, 85vw);
+  min-width: 180px;
   background: linear-gradient(135deg, var(--accent) 0%, var(--accent-hover) 100%);
   color: #fff;
   padding: 1rem 1.25rem;
@@ -465,13 +488,13 @@ body {
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
-  box-shadow: var(--shadow);
+  box-shadow: var(--shadow-card);
   transition: transform var(--transition), box-shadow var(--transition);
 }
 
 .match-card-item:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
 }
 
 a.match-card-item {
@@ -632,7 +655,7 @@ a.match-card-item:hover {
   border-radius: var(--radius);
   border: 1px solid var(--border);
   overflow: hidden;
-  box-shadow: var(--shadow);
+  box-shadow: var(--shadow-card);
 }
 
 .sports-tabs {
@@ -707,7 +730,7 @@ a.match-card-item:hover {
   align-items: center;
   flex-wrap: wrap;
   gap: 0.5rem 1rem;
-  padding: 0.75rem 1rem;
+  padding: 0.85rem 1.1rem;
   background: var(--bg-page);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
@@ -715,13 +738,14 @@ a.match-card-item:hover {
   text-decoration: none;
   font-weight: 500;
   font-size: 0.9375rem;
-  transition: background var(--transition), border-color var(--transition), color var(--transition);
+  transition: background var(--transition), border-color var(--transition), color var(--transition), transform 0.15s ease;
 }
 
 .sports-event-item:hover {
   background: var(--accent-soft);
   border-color: var(--accent);
   color: var(--accent);
+  transform: translateX(4px);
 }
 
 .sports-event-item span {
@@ -745,6 +769,8 @@ a.match-card-item:hover {
   color: rgba(255, 255, 255, 0.85);
   padding: 2rem 1.5rem;
   margin-top: auto;
+  width: 100%;
+  max-width: 100%;
 }
 .site-footer a {
   color: rgba(255, 255, 255, 0.85);
@@ -773,27 +799,38 @@ a.match-card-item:hover {
   padding: 0;
 }
 .footer-links li { margin: 0; }
+.footer-links a {
+  padding: 0.25rem 0;
+}
 .footer-copy {
   font-size: 0.8125rem;
   color: rgba(255, 255, 255, 0.6);
 }
-@media (max-width: 576px) {
-  .site-footer { padding: 1.5rem 1rem; }
-  .footer-inner { flex-direction: column; gap: 1rem; text-align: center; }
-}
 
 /* ========== Responsive ========== */
-/* Tablet and below */
+/* Large desktop – constrain main content width for readability */
+@media (min-width: 1400px) {
+  .main-content {
+    max-width: calc(100% - 280px);
+  }
+}
+
+/* Tablet and below – stack layout */
 @media (max-width: 992px) {
+  :root { --header-h: 112px; }
+
   .layout-with-sidebar {
     flex-direction: column;
+    min-height: calc(100dvh - var(--header-h));
   }
 
   .sidebar {
     width: 100%;
     min-width: 100%;
+    max-width: 100%;
     border-right: none;
     border-bottom: 1px solid var(--border);
+    border-radius: 0;
     padding: 1rem;
   }
 
@@ -811,26 +848,34 @@ a.match-card-item:hover {
   }
 
   .sports-event-item {
-    padding: 0.65rem 0.85rem;
+    padding: 0.7rem 0.9rem;
     font-size: 0.875rem;
   }
 }
 
 /* Small tablet / large phone */
 @media (max-width: 768px) {
+  :root { --header-h: 108px; }
+
   .header-top .container-fluid {
     padding-left: 0.75rem;
     padding-right: 0.75rem;
   }
 
+  .header-top .d-flex {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
   .header-utils {
-    gap: 0.35rem !important;
+    gap: 0.4rem !important;
+    flex-wrap: wrap;
   }
 
   .btn-signup,
   .btn-login {
     font-size: 0.8125rem;
-    padding: 0.45rem 0.9rem;
+    padding: 0.5rem 0.9rem;
   }
 
   .nav-scroll-wrap {
@@ -839,24 +884,31 @@ a.match-card-item:hover {
 
   .nav-arrow {
     width: 2rem;
+    min-height: 44px;
   }
 
   .header-nav-inner a {
     font-size: 0.75rem;
-    padding: 0.45rem 0.65rem;
+    padding: 0.5rem 0.7rem;
+    min-height: 36px;
+    display: inline-flex;
+    align-items: center;
   }
 
   .main-content {
-    padding: 1.25rem 1rem;
+    padding: 1rem 0.75rem;
   }
 
   .match-cards-scroll {
     gap: 0.75rem;
+    padding: 0.5rem 0;
+    -webkit-overflow-scrolling: touch;
   }
 
   .match-card-item {
-    width: 220px;
-    padding: 0.85rem 1rem;
+    width: min(220px, 75vw);
+    min-width: 160px;
+    padding: 0.9rem 1rem;
   }
 
   .match-card-item span {
@@ -865,11 +917,14 @@ a.match-card-item:hover {
 
   .sports-tabs .nav-link {
     font-size: 0.75rem;
-    padding: 0.6rem 0.75rem;
+    padding: 0.65rem 0.75rem;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
   }
 
   .sports-tab-content {
-    padding: 0.85rem 1rem;
+    padding: 0.9rem 1rem;
     min-height: 140px;
   }
 
@@ -878,44 +933,63 @@ a.match-card-item:hover {
   }
 
   .sidebar-header {
-    padding: 0.65rem 0.85rem;
+    padding: 0.7rem 0.9rem;
     font-size: 0.875rem;
+    min-height: 44px;
   }
 
   .sidebar-list a,
   .sidebar-sport-toggle {
-    padding: 0.45rem 0.85rem;
+    padding: 0.5rem 0.9rem;
     font-size: 0.8125rem;
+    min-height: 40px;
+    display: flex;
+    align-items: center;
   }
 }
 
 /* Mobile */
 @media (max-width: 576px) {
+  :root { --header-h: 100px; }
+
   .header-utils .text-white {
     display: none;
   }
 
   .logo {
-    font-size: 1.15rem;
+    font-size: clamp(1rem, 4.5vw, 1.15rem);
   }
 
   .header-top .container-fluid {
     padding-left: 0.5rem;
     padding-right: 0.5rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
   }
 
   .header-utils .btn-icon {
-    padding: 0.35rem 0.4rem;
+    padding: 0.4rem;
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .btn-signup,
   .btn-login {
     font-size: 0.75rem;
-    padding: 0.4rem 0.75rem;
+    padding: 0.5rem 0.7rem;
+    min-height: 40px;
   }
 
   .btn-profile-icon {
     font-size: 1.5rem;
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .nav-scroll-wrap {
@@ -924,26 +998,31 @@ a.match-card-item:hover {
 
   .nav-arrow {
     width: 1.75rem;
+    min-height: 44px;
   }
 
   .header-nav-inner a {
     font-size: 0.7rem;
-    padding: 0.4rem 0.5rem;
+    padding: 0.45rem 0.55rem;
   }
 
   .tag-new {
-    font-size: 0.5625rem;
+    font-size: 0.55rem;
     padding: 0.1rem 0.3rem;
   }
 
   .main-content {
-    padding: 1rem 0.75rem;
+    padding: 0.85rem 0.6rem;
+  }
+
+  .match-cards-section {
+    margin-bottom: 1.25rem;
   }
 
   .match-card-item {
-    width: 200px;
-    min-width: 200px;
-    padding: 0.75rem 1rem;
+    width: min(200px, 72vw);
+    min-width: 160px;
+    padding: 0.8rem 0.9rem;
   }
 
   .match-card-item span {
@@ -955,27 +1034,39 @@ a.match-card-item:hover {
   }
 
   .sports-tabs .nav-link {
-    font-size: 0.7rem;
-    padding: 0.5rem 0.6rem;
+    font-size: 0.68rem;
+    padding: 0.5rem 0.55rem;
   }
 
   .sports-tab-content {
-    padding: 0.75rem;
+    padding: 0.75rem 0.6rem;
     min-height: 120px;
   }
 
   .sports-event-item {
-    padding: 0.6rem 0.75rem;
+    padding: 0.65rem 0.75rem;
     font-size: 0.8125rem;
   }
 
   .sports-event-item small {
     font-size: 0.75rem;
   }
+
+  .site-footer {
+    padding: 1.25rem 1rem;
+  }
+
+  .footer-inner {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
 }
 
-/* Extra small (e.g. 320px) – prevent overflow, touch targets */
+/* Extra small (320px–400px) – touch targets, no overflow */
 @media (max-width: 400px) {
+  :root { --header-h: 96px; }
+
   .header-top .container-fluid {
     padding-left: 0.4rem;
     padding-right: 0.4rem;
@@ -986,34 +1077,56 @@ a.match-card-item:hover {
   }
 
   .header-utils .btn-icon {
-    min-width: 2.5rem;
-    min-height: 2.5rem;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
   }
 
   .btn-signup,
   .btn-login {
-    padding: 0.5rem 0.6rem;
+    padding: 0.45rem 0.55rem;
     font-size: 0.7rem;
   }
 
   .btn-profile-icon {
     font-size: 1.35rem;
-    min-width: 2.5rem;
-    min-height: 2.5rem;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
   }
 
   .match-card-item {
-    width: 180px;
-    min-width: 180px;
+    width: min(180px, 78vw);
+    min-width: 150px;
   }
 
   .layout-with-sidebar {
-    min-height: calc(100vh - 100px);
+    min-height: calc(100dvh - var(--header-h));
+  }
+
+  .sports-event-item:hover {
+    transform: none;
+  }
+}
+
+/* Very small (e.g. 320px) */
+@media (max-width: 360px) {
+  .header-nav-inner a {
+    font-size: 0.65rem;
+    padding: 0.4rem 0.45rem;
+  }
+
+  .match-card-item {
+    min-width: 140px;
+  }
+}
+
+/* Landscape phone – reduce vertical space */
+@media (max-height: 500px) and (orientation: landscape) {
+  .header-top .container-fluid {
+    padding-top: 0.35rem;
+    padding-bottom: 0.35rem;
+  }
+
+  .layout-with-sidebar {
+    min-height: auto;
   }
 }
